@@ -26,8 +26,8 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Create Android Platform Files
-        run: flutter create --platforms=android --project-name=safargo_captain --overwrite .
+      - name: Create Android Native Skeleton
+        run: flutter create --platforms=android --project-name=safargo_captain .
 
       - name: Get Dependencies
         run: flutter pub get
