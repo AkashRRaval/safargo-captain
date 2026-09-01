@@ -27,7 +27,7 @@ jobs:
           channel: 'stable'
 
       - name: Create Android Platform Files
-        run: flutter create --platforms=android --overwrite .
+        run: flutter create --platforms=android --project-name=safargo_captain --overwrite .
 
       - name: Get Dependencies
         run: flutter pub get
