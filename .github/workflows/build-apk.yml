@@ -27,7 +27,7 @@ jobs:
           channel: 'stable'
 
       - name: Create Android Native Files
-        run: flutter create . --platforms=android --org=com.safargo.captain
+        run: flutter create . --platforms=android --org=com.safargo.captain --project-name=safargo_captain
 
       - name: Get Dependencies
         run: flutter pub get
