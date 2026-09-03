@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const SafarGoCaptainApp());
+  runApp(const SafarGoDriverApp());
 }
 
-class SafarGoCaptainApp extends StatelessWidget {
-  const SafarGoCaptainApp({super.key});
+class SafarGoDriverApp extends StatelessWidget {
+  const SafarGoDriverApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,75 +14,92 @@ class SafarGoCaptainApp extends StatelessWidget {
       title: 'SafarGo Captain',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1E88E5), // Blue theme for Captain
+          primary: const Color(0xFF1E88E5),
+          secondary: const Color(0xFF212121),
+          surface: Colors.white,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF1E88E5),
+          foregroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+        ),
       ),
-      home: const HomeScreen(),
+      home: const DriverHomeScreen(),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class DriverHomeScreen extends StatefulWidget {
+  const DriverHomeScreen({super.key});
+
+  @override
+  State<DriverHomeScreen> createState() => _DriverHomeScreenState();
+}
+
+class _DriverHomeScreenState extends State<DriverHomeScreen> {
+  bool _isOnline = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SafarGo Captain'),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
-        elevation: 2,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.directions_car,
-                size: 80,
-                color: Colors.indigo,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'SafarGo Driver Partner',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Welcome aboard! Your driver dashboard is ready.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.flash_on),
-                label: const Text('GO ONLINE'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+        title: const Text('SafarGo Captain', style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [
+          Switch(
+            value: _isOnline,
+            activeColor: Colors.white,
+            activeTrackColor: Colors.greenAccent,
+            onChanged: (value) {
+              setState(() {
+                _isOnline = value;
+              });
+            },
           ),
-        ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            color: _isOnline ? Colors.green.shade100 : Colors.red.shade100,
+            child: Text(
+              _isOnline ? '🟢 YOU ARE ONLINE - Waiting for rides' : '🔴 YOU ARE OFFLINE - Go online to get rides',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: _isOnline ? Colors.green.shade800 : Colors.red.shade800,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: _isOnline
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CircularProgressIndicator(color: Color(0xFF1E88E5)),
+                        SizedBox(height: 16),
+                        Text('Searching for nearby passengers...', style: TextStyle(color: Colors.grey)),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.power_settings_new_rounded, size: 72, color: Colors.grey),
+                        SizedBox(height: 16),
+                        Text('Toggle switch above to start earning', style: TextStyle(color: Colors.grey, fontSize: 16)),
+                      ],
+                    ),
+            ),
+          ),
+        ],
       ),
     );
   }
